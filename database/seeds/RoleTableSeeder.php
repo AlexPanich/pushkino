@@ -12,18 +12,18 @@ class RoleTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('roles')->insert([
-            'name' => 'admin',
-            'label' => 'Site Administrator',
-            'created_at' => Carbon::now()->toDateTimeString(),
-            'updated_at' => Carbon::now()->toDateTimeString(),
-        ]);
+        $roles = [
+            ['name' => 'admin',  'label' => 'Site Administrator'],
+            ['name' => 'user',   'label' => 'Register User']
+        ];
 
-        DB::table('roles')->insert([
-            'name' => 'user',
-            'label' => 'Register User',
-            'created_at' => Carbon::now()->toDateTimeString(),
-            'updated_at' => Carbon::now()->toDateTimeString(),
-        ]);
+        foreach ($roles as $role) {
+            DB::table('roles')->insert([
+                'name' => $role['name'],
+                'label' => $role['label'],
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
+            ]);
+        }
     }
 }

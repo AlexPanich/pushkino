@@ -12,46 +12,22 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('permissions')->insert([
-            'name' => 'edit_article',
-            'label' => 'Edit The Article',
-            'created_at' => Carbon::now()->toDateTimeString(),
-            'updated_at' => Carbon::now()->toDateTimeString(),
-        ]);
+        $permissions = [
+            ['name' => 'edit_article',      'label' => 'Edit The Article'],
+            ['name' => 'create_article',    'label' => 'Create The Article'],
+            ['name' => 'create_message',    'label' => 'Create The Message'],
+            ['name' => 'edit_message',      'label' => 'Edit message'],
+            ['name' => 'edit_own_message',  'label' => 'Edit Own message'],
+            ['name' => 'view_admin',        'label' => 'View Admin Panel'],
+        ];
 
-        DB::table('permissions')->insert([
-            'name' => 'create_article',
-            'label' => 'Create The Article',
-            'created_at' => Carbon::now()->toDateTimeString(),
-            'updated_at' => Carbon::now()->toDateTimeString(),
-        ]);
-
-        DB::table('permissions')->insert([
-            'name' => 'create_message',
-            'label' => 'Create The Message',
-            'created_at' => Carbon::now()->toDateTimeString(),
-            'updated_at' => Carbon::now()->toDateTimeString(),
-        ]);
-
-        DB::table('permissions')->insert([
-            'name' => 'edit_message',
-            'label' => 'Edit message',
-            'created_at' => Carbon::now()->toDateTimeString(),
-            'updated_at' => Carbon::now()->toDateTimeString(),
-        ]);
-
-        DB::table('permissions')->insert([
-            'name' => 'edit_own_message',
-            'label' => 'Edit Own message',
-            'created_at' => Carbon::now()->toDateTimeString(),
-            'updated_at' => Carbon::now()->toDateTimeString(),
-        ]);
-
-        DB::table('permissions')->insert([
-            'name' => 'view_admin',
-            'label' => 'View Admin Panel',
-            'created_at' => Carbon::now()->toDateTimeString(),
-            'updated_at' => Carbon::now()->toDateTimeString(),
-        ]);
+        foreach ($permissions as $permission) {
+            DB::table('permissions')->insert([
+                'name' => $permission['name'],
+                'label' => $permission['label'],
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
+            ]);
+        }
     }
 }
