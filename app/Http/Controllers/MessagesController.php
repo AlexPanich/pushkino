@@ -39,18 +39,16 @@ class MessagesController extends Controller
         return redirect('/classifieds/messages/' . $message->id);
     }
 
-    public function show($id)
+    public function show($message)
     {
-        $message = Message::findOrFail($id);
-
         return view('messages.show', compact('message'));
     }
 
-    public function addPhoto($id, PhotoRequest $request)
+    public function addPhoto($message, PhotoRequest $request)
     {
         $photo = $this->makePhoto($request->file('photo'));
 
-        Message::find($id)->addPhoto($photo);
+        $message->addPhoto($photo);
     }
 
     protected function makePhoto(UploadedFile $file)
@@ -64,26 +62,24 @@ class MessagesController extends Controller
         return redirect()->back();
     }
 
-    public function destroy($id)
+    public function destroy($message)
     {
-        Message::findOrFail($id)->delete();
+        $message->delete();
         return redirect()->back();
     }
 
-    public function edit($id)
+    public function edit($message)
     {
-        $message = Message::findOrFail($id);
-
         return view('messages.edit', compact('message'));
     }
 
-    public function update($id, MessageRequest $request)
+    public function update($message, MessageRequest $request)
     {
-        Message::findOrFail($id)->update($request->all());
+        $message->update($request->all());
 
         flash()->success();
 
-        return redirect('/classifieds/messages/' . $id);
+        return redirect('/classifieds/messages/' . $message->id);
     }
 
 }

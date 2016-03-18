@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Article;
+use App\Message;
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -27,6 +28,10 @@ class RouteServiceProvider extends ServiceProvider
     {
         $router->bind('articles', function($id) {
             return Article::findOrFail($id);
+        });
+
+        $router->bind('messages', function($id) {
+            return Message::findOrFail($id);
         });
 
         $router->bind('tags', function($name) {
