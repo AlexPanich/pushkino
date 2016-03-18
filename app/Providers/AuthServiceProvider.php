@@ -40,6 +40,10 @@ class AuthServiceProvider extends ServiceProvider
 
     protected function getPermissions()
     {
-        return Permission::with('role')->get();
+        try {
+            return Permission::with('role')->get();
+        } catch (\PDOException $e) {
+            return [];
+        }
     }
 }
