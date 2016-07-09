@@ -34,7 +34,7 @@ class RouteServiceProvider extends ServiceProvider
             return Message::findOrFail($id);
         });
 
-        $router->bind('ta gs', function($name) {
+        $router->bind('tags', function($name) {
             return Tag::where('name', $name)->firstOrFail();
         });
 
