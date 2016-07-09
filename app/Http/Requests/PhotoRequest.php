@@ -14,7 +14,7 @@ class PhotoRequest extends Request
      */
     public function authorize()
     {
-        return Message::where(['id' => $this->messages, 'user_id' => $this->user()->id])->exists();
+        return Message::where(['id' => $this->messages->id, 'user_id' => $this->user()->id])->exists();
     }
 
     /**

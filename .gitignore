@@ -8,4 +8,5 @@
 public/images/*/*.*
 /vendor
 /node_modules
+/public/images
 

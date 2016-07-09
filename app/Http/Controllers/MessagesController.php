@@ -46,15 +46,11 @@ class MessagesController extends Controller
 
     public function addPhoto($message, PhotoRequest $request)
     {
-        $photo = $this->makePhoto($request->file('photo'));
+        $photo = Photo::fromFile($request->file('photo'));
 
         $message->addPhoto($photo);
     }
 
-    protected function makePhoto(UploadedFile $file)
-    {
-        return Photo::named($file->getClientOriginalName())->move($file);
-    }
 
     public function destroyPhoto($id)
     {

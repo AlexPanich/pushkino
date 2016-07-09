@@ -22,7 +22,7 @@ class PermissionRoleTable extends Seeder
             ['permission_id' => '5',   'role_id' => '2'],
         ];
 
-        foreach ($relations as$relation) {
+        foreach ($relations as $relation) {
             DB::table('permission_role')->insert([
                 'permission_id' => $relation['permission_id'],
                 'role_id' => $relation['role_id'],

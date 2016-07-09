@@ -3,6 +3,7 @@
 namespace App;
 
 use Image;
+use File;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 
@@ -17,30 +18,58 @@ class Photo extends Model
         'thumbnail_path'
     ];
 
+    protected $file;
+
     protected static $baseDir = 'images/messages/photos';
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($photo) {
+           return $photo->upload();
+        });
+    }
 
     public function message()
     {
         return $this->belongsTo('Message');
     }
 
-    public static function named($name)
+    public static function fromFile(UploadedFile $file)
     {
-        return (new static)->saveAs($name);
+        $photo = new static;
+
+        $photo->file = $file;
+
+        return $photo->fill([
+            'name' => $photo->fileName(),
+            'path' => $photo->filePath(),
+            'thumbnail_path' => $photo->thumbnailPath()
+        ]);
     }
 
-    protected function saveAs($name)
+    public function fileName()
     {
-        $this->name = sprintf('%s-%s', time(), $name);
-        $this->path = sprintf('%s/%s', static::$baseDir, $this->name);
-        $this->thumbnail_path = sprintf('%s/tn-%s', static::$baseDir, $this->name);
+        $name = sha1(time() . $this->file->getClientOriginalName());
+        $extension = $this->file->getClientOriginalExtension();
 
-        return $this;
+        return $name . '.' . $extension;
     }
 
-    public function move(UploadedFile $file)
+    public function filePath()
     {
-        $file->move(static::$baseDir, $this->name);
+        return static::$baseDir . '/' . $this->fileName();
+    }
+
+    public function thumbnailPath()
+    {
+        return static::$baseDir . '/tn-' . $this->fileName();
+    }
+
+    public function upload()
+    {
+        $this->file->move(static::$baseDir, $this->fileName());
 
         $this->makeThumbnail();
 
@@ -49,13 +78,13 @@ class Photo extends Model
 
     protected function makeThumbnail()
     {
-        Image::make($this->path)->fit(200)->save($this->thumbnail_path);
+        Image::make($this->filePath())->fit(200)->save($this->thumbnailPath());
     }
 
     public function delete()
     {
-        unlink($this->path);
-        unlink($this->thumbnail_path);
+        File::delete($this->path);
+        File::delete($this->thumbnail_path);
         parent::delete();
     }
 }
